@@ -69,12 +69,21 @@ Descargas exitosas: 0
 Descargas fallidas: 5
 Directorio: C:\Users\angel\IdeaProjects\ImageDownloader\imagenes
 Reporte CSV generado en: C:\Users\angel\IdeaProjects\ImageDownloader\imagenes\descargas.csv
-Preguntas de reflexión¿Qué responsabilidad desempeña la aplicación dentro de una arquitectura cliente-servidor?
-Actúa como cliente HTTP: envía peticiones GET al servidor web, interpreta los códigos de estado y encabezados, analiza el HTML recibido y realiza solicitudes adicionales para descargar los recursos binarios referenciados.¿Qué diferencias existen entre URL, URLConnection y HttpURLConnection?URL representa únicamente la dirección lógica del recurso; URLConnection es la clase abstracta que gestiona la configuración y lectura genérica de la conexión; y HttpURLConnection es su subclase especializada en HTTP/HTTPS que añade métodos como getResponseCode(), setRequestMethod() y disconnect().¿Qué sucede al invocar openConnection()?
-Se instancia localmente el objeto de conexión correspondiente al protocolo (HttpURLConnection), pero aún no se abre ningún socket de red ni se envían datos al servidor.¿Qué operaciones provocan que la conexión se establezca realmente?
-La comunicación de red inicia al llamar a connect() o a métodos que requieren leer la respuesta del servidor, como getInputStream(), getResponseCode() o getContentType().¿Por qué una página HTML puede requerir múltiples conexiones?
-Porque el HTML solo contiene texto y enlaces (src) hacia recursos externos; el cliente debe descargar primero el HTML y luego abrir una conexión independiente por cada imagen referenciada.¿Cuál es la diferencia entre getInputStream() y getContentType()?getContentType() lee el encabezado HTTP Content-Type para identificar el tipo MIME y codificación del recurso, mientras que getInputStream() proporciona el flujo de bytes del cuerpo de la respuesta.¿Por qué distinguir recursos textuales y binarios?
-Los recursos textuales requieren decodificación de caracteres (UTF-8, ISO-8859-1) mediante lectores de texto, mientras que los binarios (imágenes) deben copiarse como bytes exactos para no corromper el archivo.¿Para qué sirven los tiempos máximos de conexión y lectura?
-Evitan que la aplicación quede bloqueada indefinidamente si un servidor no responde al iniciar la conexión (setConnectTimeout) o deja de enviar datos a mitad de la descarga (setReadTimeout).¿Qué limitaciones tiene analizar HTML mediante expresiones regulares?
-HTML no es un lenguaje regular; las expresiones regulares ignoran la jerarquía del DOM y fallan ante etiquetas comentadas, atributos sin comillas, saltos de línea, signos > dentro de atributos y contenido generado por JavaScript.¿Cómo podría implementarse la descarga concurrente usando únicamente la API estándar de Java?
+  1 ¿Qué responsabilidad desempeña la aplicación dentro de una arquitectura cliente-servidor?
+Actúa como cliente HTTP: envía peticiones GET al servidor web, interpreta los códigos de estado y encabezados, analiza el HTML recibido y realiza solicitudes adicionales para descargar los recursos binarios referenciados.  2. ¿Qué diferencias existen entre URL, URLConnection y HttpURLConnection?URL representa únicamente la dirección lógica del recurso; URLConnection es la clase abstracta que gestiona la configuración y lectura genérica de la conexión; y HttpURLConnection es su subclase especializada en HTTP/HTTPS que añade métodos como getResponseCode(), setRequestMethod() y disconnect(). 
+  3. ¿Qué sucede al invocar openConnection()?
+Se instancia localmente el objeto de conexión correspondiente al protocolo (HttpURLConnection), pero aún no se abre ningún socket de red ni se envían datos al servidor.
+  4. ¿Qué operaciones provocan que la conexión se establezca realmente?
+La comunicación de red inicia al llamar a connect() o a métodos que requieren leer la respuesta del servidor, como getInputStream(), 
+getResponseCode() o getContentType().
+  5. ¿Por qué una página HTML puede requerir múltiples conexiones?
+Porque el HTML solo contiene texto y enlaces (src) hacia recursos externos; el cliente debe descargar primero el HTML y luego abrir una conexión independiente por cada imagen referenciada.
+  6. ¿Cuál es la diferencia entre getInputStream() y getContentType()?getContentType() lee el encabezado HTTP Content-Type para identificar el tipo MIME y codificación del recurso, mientras que getInputStream() proporciona el flujo de bytes del cuerpo de la respuesta.
+  7. ¿Por qué distinguir recursos textuales y binarios?
+Los recursos textuales requieren decodificación de caracteres (UTF-8, ISO-8859-1) mediante lectores de texto, mientras que los binarios (imágenes) deben copiarse como bytes exactos para no corromper el archivo.
+  8. ¿Para qué sirven los tiempos máximos de conexión y lectura?
+Evitan que la aplicación quede bloqueada indefinidamente si un servidor no responde al iniciar la conexión (setConnectTimeout) o deja de enviar datos a mitad de la descarga (setReadTimeout).
+  9. ¿Qué limitaciones tiene analizar HTML mediante expresiones regulares?
+HTML no es un lenguaje regular; las expresiones regulares ignoran la jerarquía del DOM y fallan ante etiquetas comentadas, atributos sin comillas, saltos de línea, signos > dentro de atributos y contenido generado por JavaScript.
+  10. ¿Cómo podría implementarse la descarga concurrente usando únicamente API estándar de Java?
 Creando un pool de hilos con Executors.newFixedThreadPool(...), enviando cada descarga como tarea Callable o CompletableFuture, sincronizando los contadores con AtomicInteger y cerrando el ejecutor con shutdown().
